@@ -335,6 +335,7 @@
         <a href="#string">String</a>
         <a href="#integer">Integer</a>
         <a href="#float">Float</a>
+        <a href="#decimal">Decimal</a>
         <a href="#boolean">Boolean</a>
         <a href="#datetime">Date & Time</a>
         <a href="#array">Array</a>
@@ -373,7 +374,7 @@
 
       <h3>Type System</h3>
       <ul>
-        <li><strong>Explicit Type Annotations</strong> — All values must declare their type: <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code>, <code>date</code>, <code>time</code>, <code>datetime</code></li>
+        <li><strong>Explicit Type Annotations</strong> — All values must declare their type: <code>str</code>, <code>int</code>, <code>float</code>, <code>decimal</code>, <code>bool</code>, <code>date</code>, <code>time</code>, <code>datetime</code></li>
         <li><strong>Custom Struct Types</strong> — Define structured data types with named fields and type constraints</li>
         <li><strong>Array Types</strong> — Declare arrays of any type with <code>[]</code> suffix notation</li>
         <li><strong>Nullable Types</strong> — Mark optional fields with <code>?</code> prefix to allow <code>null</code> values</li>
@@ -415,6 +416,7 @@
         <li><strong>Octal</strong> — <code>0o</code> prefix for base-8: <code>0o755</code>, <code>0o644</code></li>
         <li><strong>Binary</strong> — <code>0b</code> prefix for base-2: <code>0b1010</code>, <code>0b11111111</code></li>
         <li><strong>Floating Point</strong> — Decimal numbers with fractional parts: <code>3.14</code>, <code>-0.001</code></li>
+        <li><strong>Arbitrary Precision Decimals</strong> — Fixed-point numbers for exact arithmetic: <code>99.95</code>, <code>0.0825</code></li>
       </ul>
 
       <h3>Defaults & Reusability</h3>
@@ -565,6 +567,59 @@ Second line'''</span></code></pre>
       <pre><code><span class="tok-type">float</span> <span class="tok-key">pi</span>: <span class="tok-number">3.14159</span>
 <span class="tok-type">float</span> <span class="tok-key">negative</span>: <span class="tok-number">-0.001</span>
 <span class="tok-type">float</span> <span class="tok-key">version</span>: <span class="tok-number">1.0</span></code></pre>
+
+      <h2 id="decimal">Decimal</h2>
+      <p>Decimals are arbitrary-precision numbers with a fixed number of decimal places. Unlike floats, decimals avoid floating-point precision errors, making them ideal for financial calculations, currencies, and other applications requiring exact decimal arithmetic.</p>
+
+      <pre><code><span class="tok-type">decimal</span> <span class="tok-key">price</span>: <span class="tok-number">99.95</span>
+<span class="tok-type">decimal</span> <span class="tok-key">tax_rate</span>: <span class="tok-number">0.0825</span>
+<span class="tok-type">decimal</span> <span class="tok-key">balance</span>: <span class="tok-number">-1234.56</span></code></pre>
+
+      <h3>Syntax</h3>
+      <p>Decimal values use the same numeric syntax as floats but are interpreted with arbitrary precision. Both positive and negative values are supported.</p>
+
+      <pre><code><span class="tok-type">decimal</span> <span class="tok-key">amount</span>: <span class="tok-number">1234567.89</span>
+<span class="tok-type">decimal</span> <span class="tok-key">precise</span>: <span class="tok-number">0.123456789012345</span></code></pre>
+
+      <h3>Language Implementation</h3>
+      <p>Parser implementations map decimal values to appropriate types in the target language:</p>
+
+      <ul>
+        <li><strong>Python</strong> — <code>decimal.Decimal</code> from the standard library</li>
+        <li><strong>Java</strong> — <code>java.math.BigDecimal</code></li>
+        <li><strong>C#</strong> — <code>System.Decimal</code></li>
+        <li><strong>JavaScript</strong> — Custom <code>Decimal</code> class holding integer value and scale</li>
+        <li><strong>Go</strong> — Third-party decimal library (e.g., <code>shopspring/decimal</code>)</li>
+        <li><strong>Rust</strong> — Third-party crate (e.g., <code>rust_decimal</code>)</li>
+      </ul>
+
+      <h3>Custom Decimal Class</h3>
+      <p>For languages without built-in decimal support, parsers implement a lightweight decimal representation:</p>
+
+      <pre><code><span class="tok-comment">// Example JavaScript implementation</span>
+class Decimal {
+  constructor(value, scale) {
+    this.value = value;  <span class="tok-comment">// Integer representation</span>
+    this.scale = scale;  <span class="tok-comment">// Number of decimal places</span>
+  }
+  
+  toString() {
+    const str = this.value.toString();
+    if (this.scale === 0) return str;
+    
+    const negative = str.startsWith('-');
+    const digits = negative ? str.slice(1) : str;
+    const padded = digits.padStart(this.scale + 1, '0');
+    const whole = padded.slice(0, -this.scale) || '0';
+    const fraction = padded.slice(-this.scale);
+    
+    return (negative ? '-' : '') + whole + '.' + fraction;
+  }
+}</code></pre>
+
+      <div class="note">
+        <p><strong>Note:</strong> Custom decimal implementations typically store only the representation (value and scale) and delegate arithmetic operations to external libraries or user code. This ensures accurate decimal representation without complex arithmetic implementation.</p>
+      </div>
 
       <h2 id="boolean">Boolean</h2>
       <p>Booleans are represented by the lowercase keywords <code>true</code> and <code>false</code>.</p>
