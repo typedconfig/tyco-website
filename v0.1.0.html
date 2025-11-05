@@ -351,10 +351,11 @@
         <a href="#datetime" class="nav-indent">Date & Time</a>
         <a href="#array" class="nav-indent">Array</a>
         <a href="#global">Global Attributes</a>
-        <a href="#struct">Struct Definition</a>
-        <a href="#schema">Schema Declaration</a>
-        <a href="#defaults">Default Values</a>
-        <a href="#instances">Struct Instances</a>
+        <a href="#structs">Structs</a>
+        <a href="#struct" class="nav-indent">Struct Definition</a>
+        <a href="#schema" class="nav-indent">Schema Declaration</a>
+        <a href="#defaults" class="nav-indent">Default Values</a>
+        <a href="#instances" class="nav-indent">Struct Instances</a>
         <a href="#references">Object References</a>
         <a href="#templates">String Templates</a>
         <a href="#include">Include Directive</a>
@@ -385,7 +386,7 @@
 
       <h3>Type System</h3>
       <ul>
-        <li><strong>Explicit Type Annotations</strong> — All values must declare their type: <code>str</code>, <code>int</code>, <code>float</code>, <code>decimal</code>, <code>bool</code>, <code>date</code>, <code>time</code>, <code>datetime</code></li>
+        <li><strong>Explicit Type Annotations</strong> — All values declare type: <code>str</code>, <code>int</code>, <code>float</code>, <code>decimal</code>, <code>bool</code>, <code>date</code>, <code>time</code>, <code>datetime</code></li>
         <li><strong>Custom Struct Types</strong> — Define structured data types with named fields and type constraints</li>
         <li><strong>Array Types</strong> — Declare arrays of any type with <code>[]</code> suffix notation</li>
         <li><strong>Nullable Types</strong> — Mark optional fields with <code>?</code> prefix to allow <code>null</code> values</li>
@@ -707,6 +708,18 @@ class Decimal {
 
       <pre><code><span class="tok-type">?str</span> <span class="tok-key">optional_setting</span>: <span class="tok-string">null</span>
 <span class="tok-type">?int</span> <span class="tok-key">timeout</span>: <span class="tok-number">30</span></code></pre>
+
+      <h2 id="structs">Structs</h2>
+      <p>Structs are the core building blocks of Tyco, allowing you to define custom data types with strongly-typed fields. The struct system provides four main capabilities:</p>
+      
+      <ul>
+        <li><strong>Struct Definition</strong> - Define new data types with a name and field structure</li>
+        <li><strong>Schema Declaration</strong> - Specify field types, constraints, and optional modifiers like primary keys and nullable fields</li>
+        <li><strong>Default Values</strong> - Set default values for fields either inline or in separate declarations</li>
+        <li><strong>Struct Instances</strong> - Create actual data objects using positional or named field assignments</li>
+      </ul>
+
+      <p>Structs support advanced features including primary keys for references, nullable fields, array types, and inheritance through default value cascading.</p>
 
       <h2 id="struct">Struct Definition</h2>
       <p>Structs define structured data types with named fields. A struct definition begins with a capitalized identifier followed by a colon.</p>
