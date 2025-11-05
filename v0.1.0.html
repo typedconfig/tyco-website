@@ -157,6 +157,16 @@
       font-weight: 500;
     }
 
+    .spec-sidebar a.nav-indent {
+      padding-left: 1.5rem;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .spec-sidebar a.nav-indent:hover {
+      color: #1e6fff;
+    }
+
     .spec-content {
       flex: 1;
       max-width: 900px;
@@ -332,13 +342,14 @@
         <a href="#features">Features</a>
         <a href="#spec">Specification</a>
         <a href="#comment">Comment</a>
-        <a href="#string">String</a>
-        <a href="#integer">Integer</a>
-        <a href="#float">Float</a>
-        <a href="#decimal">Decimal</a>
-        <a href="#boolean">Boolean</a>
-        <a href="#datetime">Date & Time</a>
-        <a href="#array">Array</a>
+        <a href="#basic-types">Basic Types</a>
+        <a href="#string" class="nav-indent">String</a>
+        <a href="#integer" class="nav-indent">Integer</a>
+        <a href="#float" class="nav-indent">Float</a>
+        <a href="#decimal" class="nav-indent">Decimal</a>
+        <a href="#boolean" class="nav-indent">Boolean</a>
+        <a href="#datetime" class="nav-indent">Date & Time</a>
+        <a href="#array" class="nav-indent">Array</a>
         <a href="#global">Global Attributes</a>
         <a href="#struct">Struct Definition</a>
         <a href="#schema">Schema Declaration</a>
@@ -472,6 +483,23 @@
 <span class="tok-type">str</span> <span class="tok-key">timezone</span>: <span class="tok-string">UTC</span>  <span class="tok-comment"># This is an end-of-line comment</span></code></pre>
 
       <p>Comments cannot contain control characters other than tab (U+0009).</p>
+
+      <h2 id="basic-types">Basic Types</h2>
+      <p>Tyco provides a comprehensive set of built-in data types for configuration values. Each type has specific syntax and validation rules:</p>
+
+      <ul>
+        <li><strong><code>str</code></strong> — Text values with support for quotes, escaping, and templates</li>
+        <li><strong><code>int</code></strong> — Whole numbers (decimal, hex, octal, binary formats supported)</li>
+        <li><strong><code>float</code></strong> — Floating-point numbers with decimal notation</li>
+        <li><strong><code>decimal</code></strong> — Arbitrary-precision numbers for exact arithmetic</li>
+        <li><strong><code>bool</code></strong> — Boolean values using <code>true</code> and <code>false</code> keywords</li>
+        <li><strong><code>date</code></strong> — Calendar dates in <code>YYYY-MM-DD</code> format</li>
+        <li><strong><code>time</code></strong> — Time of day in <code>HH:MM:SS</code> format</li>
+        <li><strong><code>datetime</code></strong> — Combined date and time with optional timezone</li>
+        <li><strong><code>type[]</code></strong> — Arrays of any type using <code>[value1, value2, ...]</code> syntax</li>
+      </ul>
+
+      <p>All values in Tyco must explicitly declare their type, enabling strong type checking and eliminating ambiguity. Arrays can be created for any type by adding <code>[]</code> after the type name.</p>
 
       <h2 id="string">String</h2>
       <p>Strings are sequences of Unicode characters. Tyco supports both basic strings (with escape sequences) and literal strings (without escape processing).</p>
