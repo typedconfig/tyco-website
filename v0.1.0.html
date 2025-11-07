@@ -413,7 +413,8 @@
         <li><strong>Multi-line Strings</strong> — Triple-quoted variants (<code>"""</code> and <code>'''</code>) for multi-line text</li>
         <li><strong>Template Interpolation</strong> — Embed field references with <code>{field}</code> syntax</li>
         <li><strong>Nested Field Access</strong> — Access referenced object fields with <code>{object.field}</code></li>
-        <li><strong>Parent Traversal</strong> — Reference parent scope with <code>{..field}</code> or <code>{...field}</code></li>
+        <li><strong>Parent Traversal</strong> — Reference parent scope explicitly with <code>{..field}</code></li>
+        <li><strong>Global Access</strong> — Access global variables from structs with <code>{global.field}</code></li>
         <li><strong>Line Continuation</strong> — Use trailing backslash to continue strings across lines</li>
       </ul>
 
@@ -441,6 +442,15 @@
         <li><strong>Comments</strong> — Document configuration with <code>#</code> line comments</li>
         <li><strong>Mixed Syntax</strong> — Combine positional and named values in instance declarations</li>
         <li><strong>Line Continuation</strong> — Split long declarations with trailing backslash</li>
+      </ul>
+
+      <h3>Design Principles</h3>
+      <ul>
+        <li><strong>Explicit Over Implicit</strong> — All scope access is clearly marked (<code>global.</code>, <code>..</code>)</li>
+        <li><strong>No Surprises</strong> — No automatic namespace resolution or hidden variable lookup</li>
+        <li><strong>Clear Syntax</strong> — Unquoted values with colons must be explicitly quoted to prevent accidents</li>
+        <li><strong>Predictable Behavior</strong> — Template expansion follows explicit rules with visible scope markers</li>
+        <li><strong>Reserved Words</strong> — Avoid <code>global</code> as field names to prevent conflicts with scope access</li>
       </ul>
 
       <h3>Language Integration</h3>
@@ -508,7 +518,26 @@
 <span class="tok-type">str</span> <span class="tok-key">environment</span>: production
 <span class="tok-type">str</span> <span class="tok-key">region</span>: us-east-1</code></pre>
 
-      <p>However, you should use quoted strings when your content contains syntax characters such as parentheses <code>()</code>, square brackets <code>[]</code>, curly brackets <code>{}</code>, commas <code>,</code>, colons <code>:</code>, or newlines. Unquoted strings are treated as non-literal strings and will undergo template expansion (replacing <code>{variable}</code> references), while literal strings (using single quotes) disable this behavior.</p>
+      <h3>When to Quote Values</h3>
+      <p>Use quoted strings when your content contains syntax characters that could be interpreted as delimiters or structural elements:</p>
+      
+      <pre><code><span class="tok-comment"># URLs with colons, query parameters with commas</span>
+<span class="tok-type">str</span> <span class="tok-key">api_url</span>: <span class="tok-string">'https://api.example.com/search?q=python,java&limit=10'</span>
+
+<span class="tok-comment"># Descriptions with commas</span>
+<span class="tok-type">str</span> <span class="tok-key">description</span>: <span class="tok-string">'A fast, reliable, and secure service'</span>
+
+<span class="tok-comment"># Values with brackets, parentheses, or braces</span>
+<span class="tok-type">str</span> <span class="tok-key">expression</span>: <span class="tok-string">'func(arg1, arg2)'</span>
+<span class="tok-type">str</span> <span class="tok-key">template</span>: <span class="tok-string">'{variable} with literal braces'</span></code></pre>
+
+      <p><strong>No quotes needed for:</strong> Simple hostnames, paths, version numbers, and times (since times start with digits and can't be confused with field names):</p>
+      
+      <pre><code><span class="tok-type">str</span> <span class="tok-key">hostname</span>: api.example.com
+<span class="tok-type">str</span> <span class="tok-key">version</span>: 1.2.3
+<span class="tok-type">str</span> <span class="tok-key">start_time</span>: 14:30:00</code></pre>
+
+      <p>Unquoted strings undergo template expansion (replacing <code>{variable}</code> references), while literal strings (using single quotes) disable this behavior.</p>
 
       <h3>Basic Strings</h3>
       <p>Basic strings are surrounded by double quotes (<code>"</code>). Any Unicode character may be used except those that must be escaped: backslash (<code>\</code>) and the double quote (<code>"</code>). Basic strings support template expansion.</p>
@@ -693,11 +722,13 @@ class Decimal {
       <pre><code><span class="tok-type">int[]</span> <span class="tok-key">empty</span>: <span class="tok-string">[]</span></code></pre>
 
       <h2 id="global">Global Attributes</h2>
-      <p>Global attributes are top-level key-value pairs that are accessible throughout the configuration.</p>
+      <p>Global attributes are top-level key-value pairs that are accessible throughout the configuration. Struct instances can access global variables in templates using the explicit <code>{global.field}</code> syntax.</p>
 
       <pre><code><span class="tok-type">str</span> <span class="tok-key">timezone</span>: <span class="tok-string">UTC</span>
 <span class="tok-type">str</span> <span class="tok-key">environment</span>: <span class="tok-string">production</span>
 <span class="tok-type">int</span> <span class="tok-key">max_connections</span>: <span class="tok-number">1000</span></code></pre>
+
+      <p><strong>Note:</strong> The word <code>global</code> is semi-reserved for template access to global scope. As a best practice, avoid using <code>global</code> as a field name in struct definitions to prevent conflicts with the global access mechanism. See <a href="#templates">String Templates</a> for more information on global variable access in templates.</p>
 
       <h3>Nullable Globals</h3>
       <p>Global attributes can be marked as nullable by prefixing the type with <code>?</code>. Nullable attributes can have the value <code>null</code>.</p>
@@ -912,14 +943,35 @@ class Decimal {
   - <span class="tok-string">web_app</span>, <span class="tok-obj">Host(server1)</span>, <span class="tok-string">"{name} @ {host.ip}"</span>  <span class="tok-comment"># Resolves to "web_app @ 192.168.1.10"</span></code></pre>
 
       <h3>Parent References</h3>
-      <p>Templates can reference parent object fields using <code>..</code> prefix. Each additional dot traverses one level up.</p>
+      <p>Templates can reference parent object fields using explicit <code>..</code> prefix. Each additional dot traverses one level up in the parent hierarchy. This provides explicit control over scope traversal.</p>
 
-      <pre><code><span class="tok-type">str</span> <span class="tok-key">environment</span>: <span class="tok-string">production</span>
+      <pre><code><span class="tok-key">Project</span>:
+ *<span class="tok-type">str</span> <span class="tok-key">name</span>:
+  <span class="tok-type">str</span> <span class="tok-key">status</span>:
+  <span class="tok-key">Task</span> <span class="tok-key">task</span>:
+  - <span class="tok-string">WebApp</span>, <span class="tok-string">active</span>, <span class="tok-obj">Task("Setup for {..name}")</span>
 
-<span class="tok-key">Application</span>:
-  <span class="tok-type">str</span> <span class="tok-key">name</span>:
-  <span class="tok-type">str</span> <span class="tok-key">full_name</span>:
-  - <span class="tok-string">web_app</span>, <span class="tok-string">"{name}-{..environment}"</span>  <span class="tok-comment"># Resolves to "web_app-production"</span></code></pre>
+<span class="tok-key">Task</span>:
+  <span class="tok-type">str</span> <span class="tok-key">description</span>:</code></pre>
+
+      <p>The <code>{..name}</code> reference explicitly accesses the parent Project's <code>name</code> field, making scope relationships clear and predictable.</p>
+
+      <h3>Global Variable Access</h3>
+      <p>Struct instances must use explicit <code>global.</code> syntax to access global variables, ensuring clarity and preventing naming conflicts. Global variables can reference other globals directly.</p>
+
+      <pre><code><span class="tok-type">str</span> <span class="tok-key">company</span>: <span class="tok-string">"TechCorp"</span>
+<span class="tok-type">str</span> <span class="tok-key">region</span>: <span class="tok-string">"us-west"</span>
+
+<span class="tok-key">Person</span>:
+ *<span class="tok-type">str</span> <span class="tok-key">name</span>:
+  <span class="tok-type">str</span> <span class="tok-key">company</span>:
+  <span class="tok-type">str</span> <span class="tok-key">email</span>:
+  - <span class="tok-string">Alice</span>, <span class="tok-string">"{global.company}"</span>, <span class="tok-string">"{name}@{global.company}.com"</span>
+
+<span class="tok-comment"># Global variables access other globals directly</span>
+<span class="tok-type">str</span> <span class="tok-key">server_name</span>: <span class="tok-string">"{company}-api-{region}"</span>  <span class="tok-comment"># Resolves to "TechCorp-api-us-west"</span></code></pre>
+
+      <p>The explicit <code>global.</code> prefix makes it clear when struct instances are accessing global scope, preventing confusion with local field names. If a struct has a field named <code>global</code>, that field will take precedence over the global scope access mechanism. Global variables themselves can reference other globals directly without the prefix.</p>
 
       <h2 id="include">Include Directive</h2>
       <p>The <code>#include</code> directive allows splitting configuration across multiple files.</p>
