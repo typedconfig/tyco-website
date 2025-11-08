@@ -426,6 +426,8 @@
       <p>Beyond type safety, Tyco has built-in defaults that eliminate repetition without the complexity. Other formats force you to choose between verbose duplication, messy nesting, or tricky constructs like YAML's anchors and aliases. Tyco's defaults are simple: declare them in your schema or as separate statements, and instances inherit them automatically. No special syntax to learn, no indirection to untangle—just straightforward, readable configuration that scales.</p>
       
       <p>With built-in references and templating, you define values once and reuse them consistently. Need to reference a database server from multiple services? Use <code>Database(prod-primary)</code> instead of copy-pasting connection strings. Change the server's port? Every reference updates automatically. Your configuration stays DRY, correct, and maintainable.</p>
+      
+      <p>Tyco's tabular format makes configuration instantly scannable. Instead of spreading each field across multiple lines like TOML, Tyco lays out instances horizontally in compact rows. You can see all your servers, databases, or environments at a glance—comparing values, spotting differences, and understanding your entire configuration structure without endless scrolling. The format mirrors how you think about the data: as collections of similar objects with varying properties. See the examples below to compare for yourself.</p>
     </section>
 
     <section class="comparison-section">
