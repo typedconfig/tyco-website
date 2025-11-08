@@ -140,7 +140,72 @@
       margin-bottom: 0;
     }
 
+    .preamble ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .preamble li {
+      margin: 0.75rem 0;
+      color: #4b5563;
+      line-height: 1.7;
+      font-size: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .preamble li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #1e6fff;
+      font-weight: bold;
+    }
+
     .preamble code {
+      background: #e5e7eb;
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9em;
+      color: #1e6fff;
+    }
+
+    .why-tyco-section {
+      max-width: 900px;
+      margin: 3rem 0;
+      padding: 0 1.5rem;
+      text-align: left;
+    }
+
+    .why-tyco-section h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
+      text-align: left !important;
+    }
+
+    .why-tyco-section h3 {
+      font-size: 1.25rem;
+      margin: 2rem 0 0.75rem 0;
+      color: #111827;
+      font-weight: 600;
+      text-align: left !important;
+    }
+
+    .why-tyco-section h3:first-of-type {
+      margin-top: 0;
+    }
+
+    .why-tyco-section p {
+      margin: 0 0 0.75rem 0;
+      color: #4b5563;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .why-tyco-section code {
       background: #e5e7eb;
       padding: 0.125rem 0.375rem;
       border-radius: 3px;
@@ -394,6 +459,14 @@
         gap: 1rem;
       }
     }
+
+    /* Force left alignment for Why Tyco section */
+    section.why-tyco-section,
+    section.why-tyco-section h2,
+    section.why-tyco-section h3,
+    section.why-tyco-section p {
+      text-align: left !important;
+    }
   </style>
 </head>
 <body>
@@ -418,16 +491,14 @@
 
   <main>
     <section class="preamble">
-      <h2>Configuration as Strongly-Typed Objects</h2>
-      <p>When you write configuration files, you know exactly what structure you need: servers have hostnames and port numbers, databases require connection strings, deployments need environment variables. But traditional formats like JSON and YAML treat everything as unstructured, dynamically-typed dictionaries - leaving it up to users (and your runtime code) to maintain that structure when making changes.</p>
-      
-      <p>Tyco puts types first. Define your configuration schema once, and the format enforces it everywhere. No more accidental <code>country: NO</code> turning into <code>false</code>, <code>version: 1.20</code> becoming <code>1.2</code>, or field names silently changing from <code>timeout</code> to <code>timeOut</code> breaking your application. Tyco eliminates these entire categories of errors by making your intent - the structure of your configuration - explicit and enforced. When your schema says a field is an integer, it's an integer - period.</p>
-      
-      <p>Beyond type safety, Tyco has built-in defaults that eliminate repetition without the complexity. Other formats force you to choose between verbose duplication, messy nesting, or tricky constructs like YAML's anchors and aliases. Tyco's defaults are simple: declare them in your schema or as separate statements, and instances inherit them automatically. No special syntax to learn, no indirection to untangle - just straightforward, readable configuration that scales.</p>
-      
-      <p>With built-in references and templating, you define values once and reuse them consistently. Need to reference a database server from multiple services? Use <code>Database(prod-primary)</code> instead of copy-pasting connection strings. Change the server's port? Every reference updates automatically. Your configuration stays DRY, correct, and maintainable.</p>
-      
-      <p>Tyco's tabular format makes configuration instantly scannable. Unlike formats like TOML where each key-value pair requires its own line, Tyco lays out instances horizontally in compact rows. You can see all your servers, databases, or environments at a glance - comparing values, spotting differences, and understanding your entire configuration structure without endless scrolling. The format mirrors how you think about the data: as collections of similar objects with varying properties. See the examples below to compare for yourself.</p>
+      <h2>Features:</h2>
+      <ul>
+        <li><strong>Type safety</strong> - No more <code>country: NO</code> becoming <code>false</code> or <code>version: 1.20</code> becoming <code>1.2</code></li>
+        <li><strong>Built-in defaults</strong> - Eliminate repetition without complex nesting or tricky constructs</li>
+        <li><strong>References and templating</strong> - Define values once, reuse everywhere with automatic updates</li>
+        <li><strong>Tabular format</strong> - Scan multiple instances at a glance instead of scrolling through verbose key-value pairs</li>
+        <li><strong>Explicit schemas</strong> - Your data structure is documented and enforced in the format itself</li>
+      </ul>
     </section>
 
     <section class="comparison-section">
@@ -708,6 +779,24 @@
           <li><strong>Object references:</strong> Tyco allows referencing other objects by primary key (e.g., <code>Host(prod-01-us)</code>). JSON requires storing raw strings or duplicating data.</li>
         </ul>
       </div>
+    </section>
+
+    <section class="why-tyco-section">
+      <h2>Why Tyco?</h2>
+      
+      <h3>Type Safety First</h3>
+      <p>When you write configuration files, you know exactly what structure you need: servers have hostnames and port numbers, databases require connection strings, deployments need environment variables. But traditional formats like JSON and YAML treat everything as unstructured, dynamically-typed dictionaries - leaving it up to users (and your runtime code) to maintain that structure when making changes.</p>
+      
+      <p>Tyco puts types first. Define your configuration schema once, and the format enforces it everywhere. No more accidental <code>country: NO</code> turning into <code>false</code>, <code>version: 1.20</code> becoming <code>1.2</code>, or field names silently changing from <code>timeout</code> to <code>timeOut</code> breaking your application. Tyco eliminates these entire categories of errors by making your intent - the structure of your configuration - explicit and enforced. When your schema says a field is an integer, it's an integer - period.</p>
+      
+      <h3>Built-in Defaults Without Complexity</h3>
+      <p>Beyond type safety, Tyco has built-in defaults that eliminate repetition without the complexity. Other formats force you to choose between verbose duplication, messy nesting, or tricky constructs like YAML's anchors and aliases. Tyco's defaults are simple: declare them in your schema or as separate statements, and instances inherit them automatically. No special syntax to learn, no indirection to untangle - just straightforward, readable configuration that scales.</p>
+      
+      <h3>References and Templating</h3>
+      <p>With built-in references and templating, you define values once and reuse them consistently. Need to reference a database server from multiple services? Use <code>Database(prod-primary)</code> instead of copy-pasting connection strings. Change the server's port? Every reference updates automatically. Your configuration stays DRY, correct, and maintainable.</p>
+      
+      <h3>Scannable Tabular Format</h3>
+      <p>Tyco's tabular format makes configuration instantly scannable. Unlike formats like TOML where each key-value pair requires its own line, Tyco lays out instances horizontally in compact rows. You can see all your servers, databases, or environments at a glance - comparing values, spotting differences, and understanding your entire configuration structure without endless scrolling. The format mirrors how you think about the data: as collections of similar objects with varying properties.</p>
     </section>
 
     <section class="cta-section">
