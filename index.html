@@ -392,7 +392,7 @@
 
     .cta-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
     }
 
@@ -491,7 +491,7 @@
   <main>
     <section class="preamble">
       <p class="intro-text">
-        <strong>Tyco</strong> brings type safety to configuration. Schemas specify structure, and instances use a concise, tabular format for clarity and maintainability.
+  <strong>Tyco</strong> brings type safety to configuration. Schemas specify structure and defaults, and instances use a concise, tabular format for clarity and maintainability.
       </p>
       <h2>Key features:</h2>
       <ul>
@@ -538,7 +538,7 @@
 <span class="tok-key">Port</span>:
  *<span class="tok-type">str</span> <span class="tok-key">name</span>:
   <span class="tok-type">int</span> <span class="tok-key">number</span>:
-  - <span class="tok-string">http_web</span>,   <span class="tok-number">80</span>  <span class="tok-comment"># can skip attribute keys when obvious</span>
+  - <span class="tok-string">http_web</span>,   <span class="tok-number">80</span>  <span class="tok-comment"># can skip field keys when obvious</span>
   - <span class="tok-string">http_mysql</span>, <span class="tok-number">3306</span></code></pre>
         </div>
 
@@ -802,7 +802,7 @@
 
     <section class="cta-section">
       <h2>Get Started</h2>
-      <div class="cta-grid" style="grid-template-columns: 1fr 1fr;">
+  <div class="cta-grid">
         <div class="cta-card">
           <h3><a href="v0.1.0.html">Read the Spec</a></h3>
           <p>Dive into the complete specification to understand Tyco's syntax, type system, and capabilities in detail.</p>
