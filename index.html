@@ -512,7 +512,7 @@
   <li><strong>First-class defaults</strong> - Set common values once and focus on what's unique</li>
   <li><strong>References and templating</strong> - Clean abstractions let you reference objects and attributes</li>
         <li><strong>Tabular format</strong> - View several instances at a glance instead of vertically scrolling through key-value pairs</li>
-        <li><strong>Practical features</strong> - Native support for dates, times, and decimals, plus comments and file includes for modular configs</li>
+        <li><strong>Practical features</strong> - Native support for dates, times, decimals, enumerated choices, plus comments and file includes for modular configs</li>
       </ul>
     </section>
 
@@ -813,8 +813,8 @@
       <h3>Scannable Tabular Format</h3>
       <p>Tyco's tabular format makes configuration instantly scannable. Unlike formats like TOML where each key-value pair requires its own line, Tyco lays out instances horizontally in compact rows. You can see all your servers, databases, or environments at a glance - comparing values, spotting differences, and understanding your entire configuration structure without endless scrolling. The format mirrors how you think about the data: as collections of similar objects with varying properties.</p>
       
-      <h3>Practical Built-In Features</h3>
-      <p>Tyco includes native support for types you actually use in real-world configurations: dates for schedules and expiration policies, times for cron jobs and timeouts, and decimals for precise financial or scientific values - no more worrying about floating-point precision errors. Comments let you document your configuration inline, and file includes allow you to split large configs into modular, maintainable pieces. These aren't afterthoughts - they're first-class features designed to make your configuration files practical and production-ready.</p>
+      <h3>Practical First-Class Features</h3>
+      <p>Tyco includes native support for types you actually use in real-world configurations: dates for schedules and expiration policies, times for cron jobs and timeouts, decimals for precise financial or scientific values, and inline enums when fields should only allow curated choices. Comments let you document your configuration inline, and file includes allow you to split large configs into modular, maintainable pieces. These aren't afterthoughts - they're first-class features designed to make your configuration files practical and production-ready.</p>
     </section>
 
     <section class="cta-section">
@@ -827,15 +827,8 @@
         <div class="cta-card">
           <h3><a href="https://github.com/typedconfig/tyco-python" target="_blank" rel="noopener">Start Coding</a></h3>
           <p>
-            The easiest way to try Tyco is with the <a href="https://github.com/typedconfig/tyco-python" target="_blank" rel="noopener">Python bindings</a>—the README has a quick example to get you started.<br><br>
-            Prefer another language? <a href="https://github.com/typedconfig" target="_blank" rel="noopener">Find a parser</a> for JavaScript, Java, C, and more.
+            The easiest way to try Tyco is with the <a href="https://github.com/typedconfig/tyco-python" target="_blank" rel="noopener">Python bindings</a>. Prefer another language? <a href="https://github.com/typedconfig" target="_blank" rel="noopener">Find a parser</a> for JavaScript, Java, C, and more.
           </p>
-          <pre class="cta-code"><code>import tyco
-context = tyco.load("config.tyco")
-cfg = context.to_object()
-print(cfg.environment, cfg.timeout)
-for server in cfg.Server:
-    print(server.name, server.port)</code></pre>
         </div>
       </div>
     </section>

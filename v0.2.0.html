@@ -355,6 +355,7 @@
         <a href="#structs">Structs</a>
         <a href="#struct" class="nav-indent">Struct Definition</a>
         <a href="#schema" class="nav-indent">Schema Declaration</a>
+        <a href="#enum-fields" class="nav-indent">Enum Constraints</a>
         <a href="#defaults" class="nav-indent">Default Values</a>
         <a href="#instances" class="nav-indent">Struct Instances</a>
         <a href="#references">Object References</a>
@@ -427,6 +428,7 @@
         <li><strong>Custom Struct Types</strong> — Define structured data types with named fields and type constraints</li>
         <li><strong>Array Types</strong> — Declare arrays of any type with <code>[]</code> suffix notation</li>
         <li><strong>Nullable Types</strong> — Mark optional fields with <code>?</code> prefix to allow <code>null</code> values</li>
+        <li><strong>Enum Constraints</strong> — Limit scalar fields to curated value lists with parenthesized choices</li>
         <li><strong>Type Validation</strong> — Parser enforces type correctness at parse time</li>
       </ul>
 
@@ -838,6 +840,22 @@ class Decimal {
 <span class="tok-key">Application</span>:
   <span class="tok-type">str</span> <span class="tok-key">name</span>:
   <span class="tok-type">Database</span> <span class="tok-key">database</span>:  <span class="tok-comment"># References a Database instance</span></code></pre>
+
+      <h3 id="enum-fields">Enum Constraints</h3>
+      <p>Scalar fields can restrict their allowed values by supplying a parenthesized list of choices in place of a default. Each choice is parsed using the field's declared type, and every instance must provide a value from that list.</p>
+
+      <pre><code><span class="tok-key">Service</span>:
+  <span class="tok-type">str</span> <span class="tok-key">name</span>:
+  <span class="tok-type">str</span> <span class="tok-key">tier</span>: <span class="tok-string">(primary, backup, canary)</span>
+  <span class="tok-type">int</span> <span class="tok-key">port</span>:
+
+<span class="tok-key">Region</span>:
+  <span class="tok-type">str</span> <span class="tok-key">name</span>:
+  <span class="tok-type">str</span> <span class="tok-key">tier</span>:
+  - <span class="tok-string">ewr1</span>, <span class="tok-string">primary</span>
+  - <span class="tok-string">sjc1</span>, <span class="tok-string">backup</span></code></pre>
+
+      <p>Enum constraints are validated before templating or object creation, so misspelled or unsupported values fail fast. Choices can span multiple lines, include quoted literals, and use any base scalar type (strings, ints, decimals, booleans, etc.). Because enums represent a constraint—not a default—Tyco requires each instance to explicitly set the field.</p>
 
       <h2 id="defaults">Default Values</h2>
       <p>Default values can be specified in the schema declaration or as separate attribute assignments.</p>
