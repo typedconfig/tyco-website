@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1e6fff"/>
+  <text x="600" y="420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="280" font-weight="700" fill="white" text-anchor="middle">
+    <tspan fill="white">Ty</tspan><tspan fill="#e0e7ff">ped</tspan><tspan dx="20" fill="white">Co</tspan><tspan fill="#e0e7ff">nfig</tspan>
+  </text>
+  <text x="600" y="520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="48" font-weight="400" fill="#bfdbfe" text-anchor="middle">A configuration language with types</text>
+</svg>
